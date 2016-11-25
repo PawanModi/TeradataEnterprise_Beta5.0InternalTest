@@ -1,0 +1,147 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": { 
+	"apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },  
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the deployment"
+      }
+    },
+    "adminUserName": {
+      "type": "string",      
+      "metadata": {
+        "description": "Username for administrator"
+      }
+    },   
+    "vpPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for administrator"
+      }
+    },	
+    "vpSshPublicKey": {
+      "type": "string",      
+      "metadata": {
+        "description": "SSH public key that will be included on all nodes in the cluster. The OpenSSH public key can be generated with tools like ssh-keygen on Linux or OS X."
+      }
+    },
+	"vpAuthenticationType": {
+      "type": "string",         
+      "metadata": {
+        "description": "Authentication type for the virtual machines"
+      }
+    },
+	"clusterName": {
+      "type": "string",   
+      "metadata": {
+        "description": "Cluster name consisting of 2-10 lowercase letter and numbers"
+      }
+    },
+    "vmCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of virtual machines instances to provision"
+      }
+    },		
+	"vmSubnetStartAddress": {
+      "type": "string",      
+      "metadata": {
+        "description": "VMSubnet Start Address"
+      }
+    },  
+	"vpSystemNamePrefix": {
+      "type": "string",    
+      "metadata": {
+        "description": "Viewpoint VM system prefix"
+      }
+    },	
+	"vpNodeCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of virtual machines instances to provision for viewpoint"
+      }
+    },	
+    "vpVMSize": {
+      "type": "string",    
+      "metadata": {
+        "description": "Viewpoint VM size"
+      }
+    },    	
+    "subnet1VPID":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Viewpoint Subnet ID"	  
+	  }
+	},	
+	"vpSubnetStartAddress":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Viewpoint subnet start address"
+	 }
+	},
+	"imageStorageAccountType": {
+      "type": "string",     
+      "metadata": {
+        "description": "Storage Account type for OS vhd"
+      }      
+    },	
+	"sharedStorageAccountType":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"StorageAccount type for data disk vhd"
+	  }
+	},
+	"imagePublisher":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image publisher"
+	 }	
+	},
+	"imageOffer":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image offer name" 
+	  }	
+	},
+	"imageSku":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Image Sku name"
+	   }
+	},	
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	},
+	"scriptHostUrl":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"File script url for generating hosts and all file"
+	 }	
+	},
+	"generateHostFileParam":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Parmeter for script host file"
+	 }	
+	}
+  },
+  "variables": {      	
+   
+  },
+  "resources": [ 
+    
+  ],
+  "outputs": {   
+    
+  }
+}

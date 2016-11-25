@@ -1,0 +1,108 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+   "apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the deployed resources"
+      }
+    },
+    "imageStorageAccountType": {
+      "type": "string",     
+      "metadata": {
+        "description": "The type of the Storage Account created"
+      }      
+    },
+   	"osStorageAccountCount":{
+	   "type":"int",
+	   "metadata":{
+	     "description":"OS storage acoount count"
+	   }	
+	},
+	"clusterName": {
+      "type": "string",   
+      "metadata": {
+        "description": "Cluster name consisting of 2-10 lowercase letter and numbers"
+      }
+    },
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	}
+  },
+  "variables": {
+    "osStorageAccountArray": [	  
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'0'),'0')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'1'),'1')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'2'),'2')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'3'),'3')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'4'),'4')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'5'),'5')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'6'),'6')]", 
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'7'),'7')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'8'),'8')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'9'),'9')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'10'),'10')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'11'),'11')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'12'),'12')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'13'),'13')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'14'),'14')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'15'),'15')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'16'),'16')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'17'),'17')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'18'),'18')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'19'),'19')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'20'),'20')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'21'),'21')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'22'),'22')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'23'),'23')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'24'),'24')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'25'),'25')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'26'),'26')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'27'),'27')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'28'),'28')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'29'),'29')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'30'),'30')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'31'),'31')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'32'),'32')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'33'),'33')]"
+    ],
+  
+  },
+  "resources": [
+    	{
+		  "apiVersion": "[parameters('apiVersions').storage.storageAccounts]",
+		  "type": "Microsoft.Storage/storageAccounts",
+		  "name": "[concat('os',variables('osStorageAccountArray')[copyIndex()])]",
+		  "location": "[parameters('location')]",
+		  "kind": "Storage",	  
+		  "tags": {
+			"provider": "[toUpper(parameters('teradataTags').provider)]"
+		  },
+		  "copy": {
+            "name": "osStorageAccountsCopy",
+            "count": "[parameters('osStorageAccountCount')]"
+          },
+		  "sku": {
+			"name": "[parameters('imageStorageAccountType')]"
+		  },
+		  "properties": {
+		  }
+		}
+	],
+  "outputs": {
+    "storageAccountId": {
+      "value": "[resourceId('Microsoft.Storage/StorageAccounts',concat('os',variables('osStorageAccountArray')[0]))]",
+      "type": "string"
+    }
+  }
+}

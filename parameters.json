@@ -1,0 +1,129 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": 
+		  {
+				"location": {
+					"value": "westus"
+				},
+				"adminUsername": {
+					"value": "azureuser"
+				},
+				"authenticationType": {
+					"value": "password"
+				},
+				"adminPassword": {
+					"value": "M1umb3ai2123"
+				},
+				"vmNamePrefixdataBase": {
+					"value": "database"
+				},
+				"dbsPassword": {
+					"value": "m1umb3ai2"
+				},
+				"vmCountDatabase": {
+					"value": 4
+				},
+				"clusterVmSizeDatabase": {
+					"value": "Standard_DS14_v2"
+				},
+				"tdcTimeZone": {
+					"value": "UTC"
+				},
+				"japaneseSupport": {
+					"value": "Yes"
+				},
+				"vnetResourceGroup": {
+					"value": "ASMVPTEST9"
+				},
+				"vnetName": {
+					"value": "vnet-smvp"
+				},
+				"vnetNewOrExisting": {
+					"value": "new"
+				},
+				"vnetAddressSpace": {
+					"value": "10.12.0.0/16"
+				},
+				"vmSubnetName": {
+					"value": "vmsubnet"
+				},
+				"vmSubnetAddressSpace": {
+					"value": "10.12.0.0/24"
+				},
+				"vmSubnetStartAddress": {
+					"value": "10.12.0.4"
+				},
+				"bynet0SubnetName": {
+					"value": "bynet0"
+				},
+				"bynet0SubnetAddressSpace": {
+					"value": "10.12.1.0/24"
+				},
+				"bynet0SubnetStartAddress": {
+					"value": "10.12.1.4"
+				},
+				"bynet1SubnetName": {
+					"value": "bynet1"
+				},
+				"bynet1SubnetAddressSpace": {
+					"value": "10.12.2.0/24"
+				},
+				"bynet1SubnetStartAddress": {
+					"value": "10.12.2.4"
+				},
+				"publicIPAddressSingleOrMultiple": {
+					"value": "Single"
+				},
+				"existingNSGName": {
+					"value": "TDE_DBE_NSG"
+				},
+				"nsgResourceGroup": {
+					"value": "TDE_DBE_RG"
+				},
+				"dmYesOrNo": {
+					"value": "No"
+				},
+				"smSiteID": {
+					"value": "ASMT01"
+				},
+				"smAdminPassword": {
+					"value": "M1umb3ai2123"
+				},
+				"smRESTPassword": {
+					"value": "M1umb3ai2"
+				},
+				"smYesOrNo": {
+					"value": "Yes"
+				},
+				"vpPassword": {
+					"value": "M1umb3ai2123"
+				},
+				"vpAuthenticationType": {
+					"value": "password"
+				},
+				"vpSystemNamePrefix": {
+					"value": "viewpoint"
+				},
+				"vpVmSize": {
+					"value": "Standard_DS3_v2"
+				},
+				"vpYesOrNo": {
+					"value": "Yes"
+				},
+				"userfirstName": {
+					"value": "foobar"
+				},
+				"userlastName": {
+					"value": "foobar"
+				},
+				"jobdata": {
+					"value": "foobar"
+				},
+				"companyname": {
+					"value": "foobar"
+				}  
+		}
+}
+
+

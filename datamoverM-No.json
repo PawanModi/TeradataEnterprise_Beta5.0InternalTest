@@ -1,0 +1,145 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": { 
+	"apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },  
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the deployment"
+      }
+    },
+    "adminUserName": {
+      "type": "string",      
+      "metadata": {
+        "description": "Username for administrator"
+      }
+    },   
+    "dmPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for administrator"
+      }
+    },	
+    "dmSshPublicKey": {
+      "type": "string",      
+      "metadata": {
+        "description": "SSH public key that will be included on all nodes in the cluster. The OpenSSH public key can be generated with tools like ssh-keygen on Linux or OS X."
+      }
+    },
+	"dmAuthenticationType": {
+      "type": "string",         
+      "metadata": {
+        "description": "Authentication type for the virtual machines"
+      }
+    },
+	"dmDBCPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for DBS"
+      }
+    },	   
+	"dmSystemPrefix": {
+      "type": "string",    
+      "metadata": {
+        "description": "Datamover VM system prefix"
+      }
+    },	
+	"dmSystemCount":{
+	  "type":"int",
+	  "metadata":{
+	     "description":"Datamover Master node count"
+	  }	
+	},
+    "dmAgentCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of agent virtual machines instances to provision"
+      }
+    },	
+	"dmMasterCount":{
+	  "type":"int",
+	  "metadata":{
+		"description":"Number of master node for Datamover"
+	  }	
+	},
+    "dmVMSize": {
+      "type": "string",    
+      "metadata": {
+        "description": "Datamover VM size"
+      }
+    },	
+    "subnet1DMID":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Datamover Subnet ID"	  
+	  }
+	},	
+	"dmSubnetStartAddress":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Datmover subnet start address"
+	 }
+	},
+	"imageStorageAccountType": {
+      "type": "string",     
+      "metadata": {
+        "description": "Storage Account type for OS vhd"
+      }      
+    },	
+	"sharedStorageAccountType":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"StorageAccount type for data disk vhd"
+	  }
+	},	
+	"imagePublisher":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image publisher"
+	 }	
+	},
+	"imageOffer":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image offer name" 
+	  }	
+	},
+	"imageSku":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Image Sku name"
+	   }
+	},
+	"imageOfferAgent":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image offer name" 
+	  }	
+	},
+	"imageSkuAgent":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Image Sku name"
+	   }
+	},
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	}	
+  },
+  "variables": {      	        	
+  },
+  "resources": [       
+  ],
+  "outputs": {   
+    
+  }
+}

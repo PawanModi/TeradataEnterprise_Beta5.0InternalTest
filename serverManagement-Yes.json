@@ -1,0 +1,408 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the deployment"
+      }
+    },
+    "adminUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for administrator"
+      }
+    },
+    "smSiteID": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Server management siteID"
+      }
+    },
+    "smSshPublicKey": {
+      "type": "string",
+      "metadata": {
+        "description": "SSH public key that will be included on all nodes in the cluster. The OpenSSH public key can be generated with tools like ssh-keygen on Linux or OS X."
+      }
+    },
+    "smAuthenticationType": {
+      "type": "string",
+      "metadata": {
+        "description": "Authentication type for the virtual machines"
+      }
+    },
+    "smAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for SM Admin User"
+      }
+    },
+    "smRESTPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for SM REST API"
+      }
+    },
+    "smSystemCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of virtual machines instances to provision"
+      }
+    },
+    "smSystemPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Cluster name consisting of 2-10 lowercase letters and numbers"
+      }
+    },
+    "smVMSize": {
+      "type": "string",
+      "metadata": {
+        "description": "Server Management VM size"
+      }
+    },  
+    "subnet1SMID": {
+      "type": "string",
+      "metadata": {
+        "description": "Server management subnetID"
+      }
+    },
+	"smSubnetStartAddress":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Viewpoint subnet start address"
+	 }
+	},
+    "imagePublisher": {
+      "type": "string",
+      "metadata": {
+        "description": "Image publisher"
+      }
+    },
+    "imageOffer": {
+      "type": "string",
+      "metadata": {
+        "description": "Image offer name"
+      }
+    },
+    "imageSku": {
+      "type": "string",
+      "metadata": {
+        "description": "Image Sku name"
+      }
+    },      
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	},
+	"imageStorageAccountType": {
+      "type": "string",     
+      "metadata": {
+        "description": "Storage Account type for OS vhd"
+      }      
+    },	
+	"sharedStorageAccountType":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"StorageAccount type for datadisk vhd"
+	  }
+	}	
+  },
+  "variables": {
+    "nic1": "[concat(parameters('smSystemPrefix'),'-','nic1')]",
+    "vm": "[concat(parameters('smSystemPrefix'),'-','vm')]",
+    "clusterAvailabilitySetSettings": {
+      "name": "[concat(parameters('smSystemPrefix'),'-as')]",
+      "faultDomainCount": "3",
+      "updateDomainCount": "20"
+    },
+    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
+    "linuxConfiguration_sshPublicKey": {
+      "disablePasswordAuthentication": "true",
+      "ssh": {
+        "publicKeys": [
+          {
+            "path": "[variables('sshKeyPath')]",
+            "keyData": "[parameters('smSshPublicKey')]"
+          }
+        ]
+      }
+    },
+    "vhdsContainer": "vhds",
+    "linuxConfiguration_password": {},
+    "linuxConfiguration": "[variables(concat('linuxConfiguration_',parameters('smAuthenticationType')))]",
+    "dataStoreStorageAccountArray": [
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'0'),'0')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'1'),'1')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'2'),'2')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'3'),'3')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'4'),'4')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'5'),'5')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'6'),'6')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'7'),'7')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'8'),'8')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'9'),'9')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'10'),'10')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'11'),'11')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'12'),'12')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'13'),'13')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'14'),'14')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'15'),'15')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'16'),'16')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'17'),'17')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'18'),'18')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'19'),'19')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'20'),'20')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'21'),'21')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'22'),'22')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'23'),'23')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'24'),'24')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'25'),'25')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'26'),'26')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'27'),'27')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'28'),'28')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'29'),'29')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'30'),'30')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'31'),'31')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'32'),'32')]",
+      "[concat(uniqueString('s',parameters('smSystemPrefix'),resourceGroup().id,'33'),'33')]"
+    ],
+    "dataStoreStorageAccountCount": "[add(div(parameters('smSystemCount'),4),1)]",
+    "diskCaching": "None",
+    "datadiskSize": 256,    
+    "publicIPAddressName": "[concat(parameters('smSystemPrefix'),'-','publicip')]",
+    "publicIPAddressDomainNameLabel": "[concat(parameters('smSystemPrefix'),'-',uniqueString(resourceGroup().id))]",    
+	"diagnosticsStorageAccount": "[concat('smdig',uniqueString(resourceGroup().id,'d'))]",
+    "publicIPAddressType": "Dynamic",
+	"s1": "[split(parameters('smSubnetStartAddress'),'.')]"    
+  },
+  "resources": [
+    {
+      "apiVersion": "[parameters('apiversions').compute.availabilitySets]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('clusterAvailabilitySetSettings').name]",
+      "location": "[parameters('location')]",
+     "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },	
+      "properties": {
+        "platformFaultDomainCount": "[variables('clusterAvailabilitySetSettings').faultDomainCount]",
+        "platformUpdateDomainCount": "[variables('clusterAvailabilitySetSettings').updateDomainCount]"
+      }
+    },
+	{
+      "apiVersion": "[parameters('apiVersions').storage.storageAccounts]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('diagnosticsStorageAccount')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },	
+      "kind": "Storage",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "properties": {}
+    },   
+	{
+		  "apiVersion": "[parameters('apiVersions').storage.storageAccounts]",
+		  "type": "Microsoft.Storage/storageAccounts",
+		  "name": "[concat('os',variables('dataStoreStorageAccountArray')[copyIndex()])]",
+		  "location": "[parameters('location')]",
+		  "kind": "Storage",	  
+		  "tags": {
+			"provider": "[toUpper(parameters('teradataTags').provider)]"
+		  },
+		  "copy": {
+            "name": "osStorageAccountsCopy",
+            "count": "[variables('dataStoreStorageAccountCount')]"
+          },
+		  "sku": {
+			"name": "[parameters('imageStorageAccountType')]"
+		  },
+		  "properties": {
+		  }
+	},	
+    {
+      "apiVersion": "[parameters('apiVersions').storage.storageAccounts]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('dataStoreStorageAccountArray')[copyIndex()]]",
+      "location": "[parameters('location')]",
+      "kind": "Storage",
+      "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },	
+      "copy": {
+        "name": "dataStoreStorageAccountsCopy",
+        "count": "[variables('dataStoreStorageAccountCount')]"
+      },
+      "sku": {
+        "name": "[parameters('sharedStorageAccountType')]"
+      },
+      "properties": {}
+    },    
+    {
+      "apiVersion": "[parameters('apiVersions').network.publicIPAddresses]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(variables('publicIPAddressName'),copyIndex())]",
+      "location": "[parameters('location')]",
+     "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },	
+      "copy": {
+        "name": "publicIPCopy",
+        "count": "[parameters('smSystemCount')]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[concat(variables('publicIPAddressDomainNameLabel'),copyIndex())]"
+        },
+        "idleTimeoutInMinutes": 30
+      }
+    },
+    {
+      "apiVersion": "[parameters('apiVersions').network.networkInterfaces]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(variables('nic1'),copyIndex())]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "publicIPCopy"       
+      ],
+      "copy": {
+        "name": "nics1Copy",
+        "count": "[parameters('smSystemCount')]"
+      },
+      "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },	
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ip1",
+            "properties": {
+              "privateIPAllocationMethod": "Static", 
+			  "privateIPAddress": "[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),copyIndex()),256)), '.', mod(add(int(variables('s1')[3]),copyIndex()),256))]",              
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"
+              },
+              "subnet": {
+                "id": "[parameters('subnet1SMID')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[parameters('apiVersions').compute.virtualMachines]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('vm'),copyIndex())]",
+      "location": "[parameters('location')]",
+      "plan": {
+        "name": "[parameters('imageSku')]",
+        "product": "[parameters('imageOffer')]",
+        "publisher": "[parameters('imagePublisher')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Compute/availabilitySets/', variables('clusterAvailabilitySetSettings').name)]",
+		"[concat('Microsoft.Storage/storageAccounts/',variables('diagnosticsStorageAccount'))]",
+		"[concat('Microsoft.Storage/storageAccounts/','os',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))])]",
+        "[concat('Microsoft.Storage/storageAccounts/', variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))])]",
+        "[concat('Microsoft.Network/networkInterfaces/', concat(variables('nic1'),copyIndex()))]"
+      ],
+      "copy": {
+        "name": "vmsCopy",
+        "count": "[parameters('smSystemCount')]"
+      },
+      "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"		
+      },	
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('clusterAvailabilitySetSettings').name)]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('smVmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[concat(variables('vm'),copyIndex())]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('smAdminPassword')]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSku')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+			 "uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/','os',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],parameters('smSystemPrefix'),copyIndex(),'-osdisk.vhd')]"
+              
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }          
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',variables('diagnosticsStorageAccount'),'.blob.core.windows.net')]"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nic1'),copyIndex()))]",
+              "properties": {
+                "primary": true
+              }
+            }
+          ]
+        }
+      }
+    },
+	{
+      "apiVersion": "[parameters('apiVersions').compute.virtualMachineExtensions]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(concat(variables('vm'),copyIndex()), '/init')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "vmsCopy"
+      ],
+      "copy": {
+        "name": "initExtensionsCopy",
+        "count": "[parameters('smSystemCount')]"
+      },
+	  "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": "true",
+        "settings": {
+         "fileUris":[ ]        
+        },
+		"protectedSettings":{
+		    "commandToExecute": "/usr/local/bin/tdc-ecossh --enable"
+		}
+      }
+    }    
+  ],
+  "outputs": {}
+}

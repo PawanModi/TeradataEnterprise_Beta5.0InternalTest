@@ -1,0 +1,118 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": { 
+	"apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the deployment"
+      }
+    },
+    "adminUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "Username for administrator"
+      }
+    },
+    "smSiteID": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Server management siteID"
+      }
+    },
+    "smSshPublicKey": {
+      "type": "string",
+      "metadata": {
+        "description": "SSH public key that will be included on all nodes in the cluster. The OpenSSH public key can be generated with tools like ssh-keygen on Linux or OS X."
+      }
+    },
+    "smAuthenticationType": {
+      "type": "string",
+      "metadata": {
+        "description": "Authentication type for the virtual machines"
+      }
+    },
+    "smAdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for SM Admin User"
+      }
+    },
+    "smRESTPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for SM REST API"
+      }
+    },
+    "smSystemCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of virtual machines instances to provision"
+      }
+    },
+    "smSystemPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Cluster name consisting of 2-10 lowercase letters and numbers"
+      }
+    },
+    "smVMSize": {
+      "type": "string",
+      "metadata": {
+        "description": "Server Management VM size"
+      }
+    },  
+    "subnet1SMID": {
+      "type": "string",
+      "metadata": {
+        "description": "Server management subnetID"
+      }
+    },
+    "imagePublisher": {
+      "type": "string",
+      "metadata": {
+        "description": "Image publisher"
+      }
+    },
+    "imageOffer": {
+      "type": "string",
+      "metadata": {
+        "description": "Image offer name"
+      }
+    },
+    "imageSku": {
+      "type": "string",
+      "metadata": {
+        "description": "Image Sku name"
+      }
+    },      
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	},
+	"imageStorageAccountType": {
+      "type": "string",     
+      "metadata": {
+        "description": "Storage Account type for OS vhd"
+      }      
+    },	
+	"sharedStorageAccountType":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"StorageAccount type for datadisk vhd"
+	  }
+	}
+  },   	 
+  "resources": [ ],
+  "outputs": {   
+    
+  }
+}

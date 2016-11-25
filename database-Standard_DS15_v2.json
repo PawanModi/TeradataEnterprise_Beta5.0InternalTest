@@ -1,0 +1,467 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": { 
+	"apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },  
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the deployment"
+      }
+    },
+    "adminUserName": {
+      "type": "string",      
+      "metadata": {
+        "description": "Username for administrator"
+      }
+    },   
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for administrator"
+      }
+    },	
+    "sshPublicKey": {
+      "type": "string",      
+      "metadata": {
+        "description": "SSH public key that will be included on all nodes in the cluster. The OpenSSH public key can be generated with tools like ssh-keygen on Linux or OS X."
+      }
+    },
+	 "authenticationType": {
+      "type": "string",            
+      "metadata": {
+        "description": "Authentication type for the virtual machines"
+      }
+    },
+	"dbsPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for DBS"
+      }
+    },
+	"clusterName": {
+      "type": "string",   
+      "metadata": {
+        "description": "Cluster name consisting of 2-10 lowercase letter and numbers"
+      }
+    },
+    "vmSize": {
+      "type": "string",     
+      "metadata": {
+        "description": "VM size"
+      }
+    },
+    "vmCount": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of virtual machines instances to provision"
+      }
+    },	
+    "vnetName": {
+      "type": "string",    
+      "metadata": {
+        "description": "Virtual Network name"
+      }
+    },   
+    "vmSubnetStartAddress": {
+      "type": "string",      
+      "metadata": {
+        "description": "VMSubnet Start Address"
+      }
+    },    
+    "bynet0SubnetStartAddress": {
+      "type": "string",      
+      "metadata": {
+        "description": "Bynet0 Subnet Start Address"
+      }
+    },    
+    "bynet1SubnetStartAddress": {
+      "type": "string",      
+      "metadata": {
+        "description": "Bynet1Subnet Start Address"
+      }
+    },	
+	"tdcTimeZone": {           
+       "type": "string",
+       "metadata": {
+         "description": "Timezone for TDC Network"
+       }
+    },
+	"scriptUrlInit":{
+	  "type":"string",
+	  "metadata":{
+	     "description":"Script url"
+	    }
+	},	
+	"storageAccountDiagnostics":{
+	  "type":"string",
+	  "metadata":{
+	  "description":"Diagnostics storage account name"
+	  }
+	},		
+	"sharedStorageAccountType":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"StorageAccount type"
+	  }
+	},
+	"datadiskSize":{
+	 "type":"int",
+	 "metadata":{
+	   "description":"Each data disk size attached to node"
+	 }
+	},
+	"skuTypeValue":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Sku type for script"
+	 }
+	},
+	"imagePublisher":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image publisher"
+	 }	
+	},
+	"imageOffer":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image offer name" 
+	  }	
+	},
+	"imageSku":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Image Sku name"
+	   }
+	},
+	"dataStorageAccountCount":{
+	  "type":"int",
+	  "metadata":{
+	    "description":"Number of storage account"
+	  }
+	},
+	"kanjiSupport":{
+	  "type":"string",
+	  "metadata": {
+        "description": "Japanese Support"
+      }	
+	},
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	},
+	"imageStorageAccountType": {
+      "type": "string",     
+      "metadata": {
+        "description": "The type of the Storage Account created"
+      }      
+    },
+   	"osStorageAccountCount":{
+	   "type":"int",
+	   "metadata":{
+	     "description":"OS storage acoount count"
+	   }	
+	}	
+  },
+  "variables": {       
+    "nic1": "[concat(parameters('clusterName'),'-','nic1')]",
+    "nic2": "[concat(parameters('clusterName'),'-','nic2')]",
+    "nic3": "[concat(parameters('clusterName'),'-','nic3')]",    
+    "vm": "[concat(parameters('clusterName'),'-','vm')]",       
+    "clusterAvailabilitySetSettings": {
+      "name": "[concat(parameters('clusterName'),'-as')]",
+      "faultDomainCount": "3",
+      "updateDomainCount": "20"
+    },
+    "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
+    "linuxConfiguration_sshPublicKey": {
+      "disablePasswordAuthentication": "true",
+      "ssh": {
+        "publicKeys": [
+          {
+            "path": "[variables('sshKeyPath')]",
+            "keyData": "[parameters('sshPublicKey')]"
+          }
+        ]
+      }
+    },
+	"vhdsContainer":"vhds",
+    "linuxConfiguration_password": { },
+    "linuxConfiguration": "[variables(concat('linuxConfiguration_',parameters('authenticationType')))]",	
+	"dataStoreStorageAccountArray": [     
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'0'),'0')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'1'),'1')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'2'),'2')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'3'),'3')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'4'),'4')]",
+      "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'5'),'5')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'6'),'6')]", 
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'7'),'7')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'8'),'8')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'9'),'9')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'10'),'10')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'11'),'11')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'12'),'12')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'13'),'13')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'14'),'14')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'15'),'15')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'16'),'16')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'17'),'17')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'18'),'18')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'19'),'19')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'20'),'20')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'21'),'21')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'22'),'22')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'23'),'23')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'24'),'24')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'25'),'25')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'26'),'26')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'27'),'27')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'28'),'28')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'29'),'29')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'30'),'30')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'31'),'31')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'32'),'32')]",
+	  "[concat(uniqueString('s',parameters('clusterName'),resourceGroup().id,'33'),'33')]"
+    ],
+    "dataStoreStorageAccountCount": "[parameters('dataStorageAccountCount')]",	
+	"diskCaching":"None"
+  },
+  "resources": [    
+    {
+      "apiVersion": "[parameters('apiversions').compute.availabilitySets]",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('clusterAvailabilitySetSettings').name]",
+      "location": "[parameters('location')]",
+	  "tags": {
+         "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+      "properties": {
+        "platformFaultDomainCount": "[variables('clusterAvailabilitySetSettings').faultDomainCount]",
+        "platformUpdateDomainCount": "[variables('clusterAvailabilitySetSettings').updateDomainCount]"
+      }
+    },
+	{
+		  "apiVersion": "[parameters('apiVersions').storage.storageAccounts]",
+		  "type": "Microsoft.Storage/storageAccounts",
+		  "name": "[concat('os',variables('dataStoreStorageAccountArray')[copyIndex()])]",
+		  "location": "[parameters('location')]",
+		  "kind": "Storage",	  
+		  "tags": {
+			"provider": "[toUpper(parameters('teradataTags').provider)]"
+		  },
+		  "copy": {
+            "name": "osStorageAccountsCopy",
+            "count": "[parameters('osStorageAccountCount')]"
+          },
+		  "sku": {
+			"name": "[parameters('imageStorageAccountType')]"
+		  },
+		  "properties": {
+		  }
+	},
+    {
+      "apiVersion": "[parameters('apiVersions').storage.storageAccounts]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('dataStoreStorageAccountArray')[copyIndex()]]",
+      "location": "[parameters('location')]",
+      "kind": "Storage",	  
+	  "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+	  "copy": {
+        "name": "dataStoreStorageAccountsCopy",
+        "count": "[variables('dataStoreStorageAccountCount')]"
+      },
+      "sku": {
+        "name": "[parameters('sharedStorageAccountType')]"
+      },
+      "properties": {
+      }
+    },	
+    {
+      "apiVersion": "[parameters('apiVersions').compute.virtualMachines]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[concat(variables('vm'),copyIndex())]",
+      "location": "[parameters('location')]",
+	  "plan":{
+		 "name":"[parameters('imageSku')]",		 
+		 "product":"[parameters('imageOffer')]",
+		 "publisher":"[parameters('imagePublisher')]"
+	  },
+      "dependsOn": [
+        "[concat('Microsoft.Compute/availabilitySets/', variables('clusterAvailabilitySetSettings').name)]",       
+        "[concat('Microsoft.Storage/storageAccounts/', variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))])]",
+		"[concat('Microsoft.Storage/storageAccounts/','os',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))])]"
+      ],
+      "copy": {
+        "name": "vmsCopy",
+        "count": "[parameters('vmCount')]"
+      },
+      "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('clusterAvailabilitySetSettings').name)]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "osProfile": {
+          "computerName": "[concat(variables('vm'),copyIndex())]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
+        },
+        "storageProfile": {  
+		  "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSku')]",
+            "version": "latest"
+          },		
+          "osDisk": {
+            "name": "osdisk",						
+            "vhd": {              
+			   "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/','os',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],parameters('clusterName'),copyIndex(),'-osdisk.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+		"dataDisks": [
+                        {
+                            "name": "[concat('datadisk1',copyIndex())]",
+                            "diskSizeGB": "[parameters('datadiskSize')]",
+                            "lun": 0,
+							"createOption": "Empty",
+							"caching": "[variables('diskCaching')]",
+                            "vhd": {	
+								"Uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],concat(parameters('clusterName'),'-dataDisk1',copyIndex()),'.vhd')]"                                
+                            }                            
+                        },
+                        {
+                            "name": "[concat('datadisk2',copyIndex())]",
+                            "diskSizeGB": "[parameters('datadiskSize')]",
+                            "lun": 1,
+                            "createOption": "Empty",
+							"caching": "[variables('diskCaching')]",
+							"vhd": {
+								"Uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],concat(parameters('clusterName'),'-dataDisk2',copyIndex()),'.vhd')]"                                                                
+                            }                            
+                        },
+						{
+                            "name": "[concat('datadisk3',copyIndex())]",
+                            "diskSizeGB": "[parameters('datadiskSize')]",
+                            "lun": 2,
+							"createOption": "Empty",
+							"caching": "[variables('diskCaching')]",
+                            "vhd": {
+                                "Uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],concat(parameters('clusterName'),'-dataDisk3',copyIndex()),'.vhd')]"                                
+                            }                            
+                        },
+                        {
+                            "name": "[concat('datadisk4',copyIndex())]",
+                            "diskSizeGB": "[parameters('datadiskSize')]",
+                            "lun": 3,
+                            "createOption": "Empty",
+							"caching": "[variables('diskCaching')]",
+							"vhd": {
+                                "Uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],concat(parameters('clusterName'),'-dataDisk4',copyIndex()),'.vhd')]"                                
+                            }                            
+                        },
+						{
+                            "name": "[concat('datadisk5',copyIndex())]",
+                            "diskSizeGB": "[parameters('datadiskSize')]",
+                            "lun": 4,
+							"createOption": "Empty",
+							"caching": "[variables('diskCaching')]",
+                            "vhd": {							
+                                "Uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],concat(parameters('clusterName'),'-dataDisk5',copyIndex()),'.vhd')]"                                
+                            }                            
+                        },
+                        {
+                            "name": "[concat('datadisk6',copyIndex())]",
+                            "diskSizeGB": "[parameters('datadiskSize')]",
+                            "lun": 5,
+                            "createOption": "Empty",
+							"caching": "[variables('diskCaching')]",
+							"vhd": {
+                                "Uri":"[concat(reference(concat('Microsoft.Storage/storageAccounts/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))]), '2016-05-01').primaryEndpoints.blob,variables('vhdsContainer'),'/',variables('dataStoreStorageAccountArray')[mod(copyIndex(),variables('dataStoreStorageAccountCount'))],concat(parameters('clusterName'),'-dataDisk6',copyIndex()),'.vhd')]"                                
+                            }                            
+                        }
+            ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": "true",
+            "storageUri": "[concat('http://',parameters('storageAccountDiagnostics'),'.blob.core.windows.net')]"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nic1'),copyIndex()))]",
+              "properties": {
+                "primary": true
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nic2'),copyIndex()))]",
+              "properties": {
+                "primary": false
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('nic3'),copyIndex()))]",
+              "properties": {
+                "primary": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "apiVersion": "[parameters('apiVersions').compute.virtualMachineExtensions]",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(concat(variables('vm'),copyIndex()), '/init')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "vmsCopy"
+      ],
+      "copy": {
+        "name": "initExtensionsCopy",
+        "count": "[parameters('vmCount')]"
+      },
+	  "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+      "properties": {
+        "publisher": "Microsoft.Azure.Extensions",
+        "type": "CustomScript",
+        "typeHandlerVersion": "2.0",
+        "autoUpgradeMinorVersion": "true",
+        "settings": {
+          "fileUris": [
+            "[parameters('scriptUrlInit')]"
+          ]       
+        },
+		"protectedSettings":{
+		    "commandToExecute": "[concat('sh mpp_configuration.sh',' ',parameters('tdcTimeZone'),' ',parameters('vmCount'),' ',variables('vm'),' ', parameters('vmSubnetStartAddress'), ',', parameters('bynet0SubnetStartAddress'), ',', parameters('bynet1SubnetStartAddress'),' ',parameters('clusterName'),' ',parameters('dbsPassword'),' ',parameters('skuTypeValue'),' ',parameters('datadiskSize'),' ',parameters('kanjiSupport'))]"
+		}
+      }
+    }
+  ],
+  "outputs": {   
+   
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+	"apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location"
+      }
+    },   
+    "publicIPAddressName": {
+      "type": "string",
+      "metadata": {
+        "description": "Public IP Address Name"
+      }
+    },
+    "publicIPAddressType": {
+      "type": "string",
+      "metadata": {
+        "description": "Public IP Address Type (e.g. Static or Dynamic)"
+      }
+    },
+    "publicIPAddressDomainNameLabel": {
+      "type": "string",
+      "metadata": {
+        "description": "Public IP DNS prefix (e.g. [dnsName].region.cloudapp.azure.com)"
+      }
+    },
+	"vmCount":{
+	  "type": "int",
+      "metadata": {
+        "description": "Number of the VMs in DBS System"
+      }
+	},
+	"nic1":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"NIC1 name prefix"
+	  }
+	},
+	"nic2":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"NIC2 name prefix"
+	  }
+	},
+	"nic3":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"NIC3 name prefix"
+	  }
+	},
+	"vmSubnetStartAddress":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"vmSubnet Start Address"
+	  }
+	},
+	"bynet0SubnetStartAddress":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"bynet0Subnet Start Address"
+	  }
+	},
+	"bynet1SubnetStartAddress":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"bynet1Subnet Start Address"
+	  }
+	},
+	"subnet1ID":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"Subnet1 resource ID"
+	  }
+	},
+	"subnet2ID":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"Subnet2 resource ID"
+	  }
+	},
+	"subnet3ID":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"Subnet3 resource ID"
+	  }
+	},
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	}
+  },
+  "variables": {
+    "s1": "[split(parameters('vmSubnetStartAddress'),'.')]",
+	"s2": "[split(parameters('bynet0SubnetStartAddress'),'.')]",
+	"s3": "[split(parameters('bynet1SubnetStartAddress'),'.')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "[parameters('apiVersions').network.publicIPAddresses]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[concat(parameters('publicIPAddressName'),copyIndex())]",
+      "location": "[parameters('location')]",	  
+	  "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },	  
+	  "copy": {
+        "name": "publicIPCopy",
+        "count": "[parameters('vmCount')]"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "[parameters('publicIPAddressType')]",		
+        "dnsSettings": {
+          "domainNameLabel": "[concat(parameters('publicIPAddressDomainNameLabel'),copyIndex())]"
+        },
+		"idleTimeoutInMinutes": 30
+      }
+    },		
+    {
+      "apiVersion": "[parameters('apiVersions').network.networkInterfaces]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('nic1'),copyIndex())]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "publicIPCopy"
+      ],
+	  "copy": {
+        "name": "nics1Copy",
+        "count": "[parameters('vmCount')]"
+      },
+	  "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ip1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),copyIndex()),256)), '.', mod(add(int(variables('s1')[3]),copyIndex()),256))]",              
+			  "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('publicIPAddressName'),copyIndex()))]"
+              },
+              "subnet": {
+                "id": "[parameters('subnet1ID')]"
+              }
+            }
+          }
+        ]
+      }
+    },    
+    {
+      "apiVersion": "[parameters('apiVersions').network.networkInterfaces]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('nic2'),copyIndex())]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+      
+      ],
+      "copy": {
+        "name": "nics2Copy",
+        "count": "[parameters('vmCount')]"
+      },
+	  "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ip1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(variables('s2')[0], '.', variables('s2')[1], '.', add(int(variables('s2')[2]), div(add(int(variables('s2')[3]),copyindex()),256)), '.', mod(add(int(variables('s2')[3]),copyindex()),256))]",
+              "subnet": {
+                "id": "[parameters('subnet2ID')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[parameters('apiVersions').network.networkInterfaces]",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[concat(parameters('nic3'),copyIndex())]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+      
+      ],
+      "copy": {
+        "name": "nics3Copy",
+        "count": "[parameters('vmCount')]"
+      },
+	  "tags": {
+        "provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ip1",
+            "properties": {
+              "privateIPAllocationMethod": "Static",
+              "privateIPAddress": "[concat(variables('s3')[0], '.', variables('s3')[1], '.', add(int(variables('s3')[2]), div(add(int(variables('s3')[3]),copyindex()),256)), '.', mod(add(int(variables('s3')[3]),copyindex()),256))]",
+              "subnet": {
+                "id": "[parameters('subnet3ID')]"
+              }
+            }
+          }
+        ]
+      }
+    }
+   ],  
+  "outputs": {
+		"publicIPID": {
+		  "value": "[resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('publicIPAddressName'),'0'))]",
+		  "type": "string"
+		},
+		"fqdn": {
+		  "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses',concat(parameters('publicIPAddressName'),'0')),'2016-03-30').dnsSettings.fqdn]",
+		  "type": "string"
+		}
+	}
+}

@@ -1,1 +1,0 @@
-# TeradataEnterprise_Beta5.0_Ecointernal

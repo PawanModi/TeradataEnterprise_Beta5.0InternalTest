@@ -10,4 +10,4 @@ This repository will use existinh NSG, updated custom script extension 2.0 and s
 </ul> 
 Note : You can verify the behavior and functionality of a CreateUiDefinition by Copy and pasteing or click on URL from #TestURL into your browser and navigate.
 
-TestUrl :  https://portal.azure.com/#blade/Microsoft_Azure_Compute/CreateMultiVmWizardBlade/internal_bladeCallId/anything/internal_bladeCallerParams/{"initialData":{},"providerConfig":{"createUiDefinition":"https%3A%2F%2Fraw.githubusercontent.com%2Fbtprabhu%2FTeradataEnterprise_Beta4.0_internal%2Fmaster%2FcreateUiDefinition.json"}}
+TestUrl :  https://portal.azure.com/#blade/Microsoft_Azure_Compute/CreateMultiVmWizardBlade/internal_bladeCallId/anything/internal_bladeCallerParams/{"initialData":{},"providerConfig":{"createUiDefinition":"https%3A%2F%2Fraw.githubusercontent.com%2Fbtprabhu%2FTeradataEnterprise_Beta5.0_Ecointernal%2Fmaster%2FcreateUiDefinition.json"}}

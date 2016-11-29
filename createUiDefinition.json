@@ -1210,7 +1210,7 @@
 	  "dmAuthenticationType": "[steps('dataMoverConfig').dmSSHCredntials.authenticationType]",
 	  "dmDBCPassword":"[steps('dataMoverConfig').dmDBCPassword]",	    
 	  "dmSystemPrefix":"[steps('dataMoverConfig').dmSystemNamePrefix]",
-	  "dmAgentNodeCount":"[int(steps('dataMoverConfig').dmAgentNodeCount)]",
+	  "dmAgentNodeCount":"[int(coalesce(steps('dataMoverConfig').dmAgentNodeCount,0))]",
 	  "dmClusterVmSize":"[steps('dataMoverConfig').dmClusterVmSize]",	  
 	  "dmYesOrNo":"[steps('dataMoverConfig').dataMoverSelector]",	
 	  "smSiteID":"[steps('serverManagementConfig').smSiteID]",

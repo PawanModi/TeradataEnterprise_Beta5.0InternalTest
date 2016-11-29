@@ -200,7 +200,7 @@
 	"publicIPAddressDomainNameLabel":"[concat(parameters('vpSystemNamePrefix'),'-',uniqueString(resourceGroup().id))]",	
 	"dataStoreStorageAccountCount": "[add(div(parameters('vpNodeCount'),4),1)]",	
 	"diagnosticsStorageAccount": "[concat('vpdig',uniqueString(resourceGroup().id,'d'))]",
-	"publicIPAddressType": "Dynamic",
+	"publicIPAddressType": "Static",
 	"s1": "[split(parameters('vpSubnetStartAddress'),'.')]"
   },
   "resources": [ 

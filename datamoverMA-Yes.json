@@ -201,7 +201,7 @@
 	"dataStoreStorageAccountCount": "[add(div(parameters('dmSystemCount'),4),1)]",
     "diagnosticsStorageAccount": "[concat('dmdiag',uniqueString(resourceGroup().id,'d'))]",	
 	"s1": "[split(parameters('dmSubnetStartAddress'),'.')]",
-	"publicIPAddressType":"Dynamic"	     	
+	"publicIPAddressType":"Static"	     	
   },
   "resources": [ 
      {

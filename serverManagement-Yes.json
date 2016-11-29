@@ -182,7 +182,7 @@
     "publicIPAddressName": "[concat(parameters('smSystemPrefix'),'-','publicip')]",
     "publicIPAddressDomainNameLabel": "[concat(parameters('smSystemPrefix'),'-',uniqueString(resourceGroup().id))]",    
 	"diagnosticsStorageAccount": "[concat('smdig',uniqueString(resourceGroup().id,'d'))]",
-    "publicIPAddressType": "Dynamic",
+    "publicIPAddressType": "Static",
 	"s1": "[split(parameters('smSubnetStartAddress'),'.')]"    
   },
   "resources": [

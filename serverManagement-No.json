@@ -74,6 +74,12 @@
         "description": "Server management subnetID"
       }
     },
+	"smSubnetStartAddress":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Viewpoint subnet start address"
+	 }
+	},
     "imagePublisher": {
       "type": "string",
       "metadata": {

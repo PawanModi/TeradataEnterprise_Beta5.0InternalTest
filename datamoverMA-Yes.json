@@ -355,7 +355,7 @@
           "vmSize": "[parameters('dmVMSize')]"
         },
         "osProfile": {
-          "computerName": "[concat(variables('vm'),copyIndex())]",
+          "computerName": "[concat(variables('vm'),concat('Master-Agent',add(copyIndex(),1)))]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('dmPassword')]",
           "linuxConfiguration": "[variables('linuxConfiguration')]"
@@ -431,7 +431,7 @@
 	{
       "apiVersion": "[parameters('apiVersions').compute.virtualMachines]",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(variables('vm'),copyIndex(1))]",
+      "name": "[concat(variables('vm'),concat('-agent',add(1,copyIndex(1))))]",
       "location": "[parameters('location')]",
 	  "plan":{
 		 "name":"[parameters('imageSkuAgent')]",		 
@@ -460,7 +460,7 @@
           "vmSize": "[parameters('dmVMSize')]"
         },
         "osProfile": {
-          "computerName": "[concat(variables('vm'),copyIndex(1))]",
+          "computerName": "[concat(variables('vm'),concat('-Agent',add(1,copyIndex(1))))]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('dmPassword')]",
           "linuxConfiguration": "[variables('linuxConfiguration')]"

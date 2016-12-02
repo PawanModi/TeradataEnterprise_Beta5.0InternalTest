@@ -331,7 +331,7 @@
           "vmSize": "[parameters('dmVMSize')]"
         },
         "osProfile": {
-          "computerName": "[concat(variables('vm'),copyIndex())]",
+          "computerName": "[concat(variables('vm'),concat('Master-Agent',add(copyIndex(),1)))]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('dmPassword')]",
           "linuxConfiguration": "[variables('linuxConfiguration')]"

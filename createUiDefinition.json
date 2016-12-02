@@ -1117,6 +1117,24 @@
 							"visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"							
 						},
 						{
+							"name": "dmIntPassword",
+							"type": "Microsoft.Common.PasswordBox",
+							"label": {
+							 "password":"DM Internl Password",
+							 "confirmPassword": "Confirm DM Internl Password"
+							},
+							"toolTip": "DM Internl Password for the Data Mover Internal Repository",
+							"constraints": {
+							  "required": true,
+							  "regex": "^[A-Za-z][a-z0-9A-Z]{7,14}$",
+							  "validationMessage": "Password must be between 8 and 15 characters long, can contain only numbers and letters, and must start with a letter"
+							},
+							"options": {
+								"hideConfirmation": false 
+							},
+							"visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"							
+						},
+						{
 							"name": "dmSystemNamePrefix",
 							"type": "Microsoft.Common.TextBox",
 							"label": "Datamover System Name Prefix",
@@ -1339,6 +1357,7 @@
 	  "dmSshPublicKey":"[steps('dataMoverConfig').dmSSHCredntials.sshPublicKey]",
 	  "dmAuthenticationType": "[steps('dataMoverConfig').dmSSHCredntials.authenticationType]",
 	  "dmDBCPassword":"[steps('dataMoverConfig').dmDBCPassword]",	    
+	  "dmIntPassword":"[steps('dataMoverConfig').dmIntPassword]",	
 	  "dmSystemPrefix":"[steps('dataMoverConfig').dmSystemNamePrefix]",
 	  "dmAgentNodeCount":"[int(coalesce(steps('dataMoverConfig').dmAgentNodeCount,0))]",
 	  "dmClusterVmSize":"[steps('dataMoverConfig').dmClusterVmSize]",	  

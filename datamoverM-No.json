@@ -44,6 +44,12 @@
         "description": "Password for DBS"
       }
     },	   
+	"dmIntPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for DBS"
+      }
+    },	
 	"dmSystemPrefix": {
       "type": "string",    
       "metadata": {

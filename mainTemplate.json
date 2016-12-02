@@ -214,6 +214,13 @@
 			"description": "Data mover dbc password"
 		  }
 		},
+		"dmIntPassword": {
+		  "type": "securestring",
+		  "defaultValue": "",		  
+		  "metadata": {
+			"description": "Data mover dbc password"
+		  }
+		},
 		"dmSystemPrefix":{
 		  "type":"string",
 		  "defaultValue":"datamover",
@@ -750,6 +757,10 @@
 			  },
 			  "dmDBCPassword":{
 				"value":"[parameters('dmDBCPassword')]"
+			  },
+			  ,
+			  "dmIntPassword":{
+				"value":"[parameters(dmIntPassword)]"
 			  },
 			  "dmSystemPrefix":{
 			    "value":"[parameters('dmSystemPrefix')]"

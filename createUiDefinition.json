@@ -1277,23 +1277,19 @@
 							"visible": "[equals('Yes',steps('dsuConfig').dsuSelector)]"
 							
 						},						
-						
-						},
 						{
 						  "name": "dsuClusterVmSize",
 						  "type": "Microsoft.Compute.SizeSelector",
 						  "label": "VM Size",
 						  "toolTip": "The size of virtual machine to provision for each cluster node.",
 						  "recommendedSizes": [            							
-							"Standard_DS5_v2",
-							  "Standard_DS3_v2",
+							
 							"Standard_DS4_v2"
 														
 						  ],
 						  "constraints": {
 							"allowedSizes": [            
-							"Standard_DS5_v2",
-								"Standard_DS3_v2",
+							
 							"Standard_DS4_v2"
 															
 							]

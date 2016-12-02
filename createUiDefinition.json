@@ -1176,7 +1176,7 @@
 	},
 	{
 		"name": "dsuConfig",
-		"label": "Data Mover",
+		"label": "Data Stream Utility",
 		"subLabel": {
 		"preValidation": "Configure Data Mover",
 		"postValidation": "Done"
@@ -1366,7 +1366,7 @@
 	  "dsuSystemPrefix":"[steps('dsuConfig').dsuSystemNamePrefix]",
 	  "dsuAgentNodeCount":"[int(coalesce(steps('dsuConfig').dsuAgentNodeCount,0))]",
 	  "dsuClusterVmSize":"[steps('dsuConfig').dsuClusterVmSize]",	  
-	  "dsuYesOrNo":"[steps('dsuConfig').dsuSelector]",	
+	  "dsuYesOrNo":"[steps('dsuConfig').dsuSelector]"
 	}
   }
 }

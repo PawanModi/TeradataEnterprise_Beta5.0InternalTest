@@ -1133,7 +1133,7 @@
 						{
 							"name": "dmAgentNodeCount",
 							"type": "Microsoft.Common.TextBox",
-							"label": "Additional Agents",
+							"label": "Datamover Agents",
 							"defaultValue": 0,			
 							"toolTip": "Number of additional Data Mover Agents (Min: 0 Max: 3)",
 							"constraints": {
@@ -1171,6 +1171,140 @@
 						  },			  
 						  "count":"[steps('databaseConfig').clusterNodeCount]",
 						  "visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"							  
+						}
+				   ]
+	},
+	{
+		"name": "dsuConfig",
+		"label": "Data Mover",
+		"subLabel": {
+		"preValidation": "Configure Data Mover",
+		"postValidation": "Done"
+		},
+		"bladeTitle": "Data Mover settings",
+		"elements": [ 
+					   {
+						  "name": "dsuSelector",
+						  "type": "Microsoft.Common.OptionsGroup",
+						  "label": "Data Stream Utility",
+						  "defaultValue": "No",
+						  "toolTip": "",
+						  "constraints": {
+							"allowedValues": [
+							  {
+								"label": "Yes",
+								"value": "Yes"
+							  },
+							  {
+								"label": "No",
+								"value": "No"
+							  }
+							]
+						  }
+						},
+						{
+						  "name": "dsuSSHCredntials",
+						  "type": "Microsoft.Compute.CredentialsCombo",
+						  "label": {
+							"authenticationType": "Authentication type",
+							"password": "Authentication Password",
+							"confirmPassword": "Confirm authentication Password",
+							"sshPublicKey": "SSH public key"
+						  },
+						  "toolTip": {
+							"authenticationType": "",
+							"password": "dsu password for the Data Mover internal repository",
+							"sshPublicKey": ""
+						  },
+						  "constraints": {
+							"required": true
+						  },							
+						  "options": {
+							"hideConfirmation": "[not(equals('Yes',steps('dsuConfig').dsuSelector))]",
+							"hidePassword": "[not(equals('Yes',steps('dsuConfig').dsuSelector))]"
+						  },						 	
+						  "osPlatform": "Linux",
+						  "visible": "[equals('Yes',steps('dsuConfig').dsuSelector)]"
+						  
+						},
+						{
+							"name": "dsuDBCPassword",
+							"type": "Microsoft.Common.PasswordBox",
+							"label": {
+							 "password":"DBC Password",
+							 "confirmPassword": "Confirm DBC Password"
+							},
+							"toolTip": "DBC Password for the Data Mover Internal Repository",
+							"constraints": {
+							  "required": true,
+							  "regex": "^[A-Za-z][a-z0-9A-Z]{7,14}$",
+							  "validationMessage": "Password must be between 8 and 15 characters long, can contain only numbers and letters, and must start with a letter"
+							},
+							"options": {
+								"hideConfirmation": false 
+							},
+							"visible": "[equals('Yes',steps('dsuConfig').dsuSelector)]"							
+						},
+						{
+							"name": "dsuadminPassword",
+							"type": "Microsoft.Common.PasswordBox",
+							"label": {
+							 "password":"DSU admin Password",
+							 "confirmPassword": "Confirm DSU admin Password"
+							},
+							"toolTip": "admin Password for the DSU",
+							"constraints": {
+							  "required": true,
+							  "regex": "^[A-Za-z][a-z0-9A-Z]{7,14}$",
+							  "validationMessage": "Password must be between 8 and 15 characters long, can contain only numbers and letters, and must start with a letter"
+							},
+							"options": {
+								"hideConfirmation": false 
+							},
+							"visible": "[equals('Yes',steps('dsuConfig').dsuSelector)]"							
+						},
+						{
+							"name": "dsuSystemNamePrefix",
+							"type": "Microsoft.Common.TextBox",
+							"label": "dsu System Name Prefix",
+							"defaultValue": "dsu",
+							"toolTip": "Prefix that will be used for all nodes in the cluster",
+							"constraints": {
+							  "required": true,
+							  "regex": "^[a-z][a-z0-9]{2,10}$",
+							  "validationMessage": "System name prefix must be between 3 and 10 characters long, can contain only numbers and lowercase letters, and must start with a letter"
+							},
+							"visible": "[equals('Yes',steps('dsuConfig').dsuSelector)]"
+							
+						},						
+						
+						},
+						{
+						  "name": "dsuClusterVmSize",
+						  "type": "Microsoft.Compute.SizeSelector",
+						  "label": "VM Size",
+						  "toolTip": "The size of virtual machine to provision for each cluster node.",
+						  "recommendedSizes": [            							
+							"Standard_DS5_v2",
+							  "Standard_DS3_v2",
+							"Standard_DS4_v2"
+														
+						  ],
+						  "constraints": {
+							"allowedSizes": [            
+							"Standard_DS5_v2",
+								"Standard_DS3_v2",
+							"Standard_DS4_v2"
+															
+							]
+						  },
+						  "osPlatform": "Linux", 
+						  "imageReference": {
+						  "publisher": "teradata",
+						  "offer": "teradata-mpp-beta-preview",
+						  "sku": "mpp-beta-image"
+						  },			  
+						  "visible": "[equals('Yes',steps('dsuConfig').dsuSelector)]"							  
 						}
 				   ]
 	}
@@ -1222,7 +1356,17 @@
 	  "vpAuthenticationType": "[steps('viewPointConfig').vpSSHCredntials.authenticationType]",	  
 	  "vpSystemNamePrefix":"[steps('viewPointConfig').vpSystemNamePrefix]",	  
 	  "vpVmSize":"[steps('viewPointConfig').vpClusterVmSize]",	  
-	  "vpYesOrNo":"[steps('viewPointConfig').viewpointSelector]"	  
+	  "vpYesOrNo":"[steps('viewPointConfig').viewpointSelector]"	  ,
+	  
+	  "dsuPassword":"[steps('dsuConfig').dsuSSHCredntials.password]",
+	  "dsuSshPublicKey":"[steps('dsuConfig').dsuSSHCredntials.sshPublicKey]",
+	  "dsuAuthenticationType": "[steps('dsuConfig').dsuSSHCredntials.authenticationType]",
+	  "dsuDBCPassword":"[steps('dsuConfig').dsuDBCPassword]",	    
+	  "dsuadminPassword":"[steps('dsuConfig').dsuadminPassword]",
+	  "dsuSystemPrefix":"[steps('dsuConfig').dsuSystemNamePrefix]",
+	  "dsuAgentNodeCount":"[int(coalesce(steps('dsuConfig').dsuAgentNodeCount,0))]",
+	  "dsuClusterVmSize":"[steps('dsuConfig').dsuClusterVmSize]",	  
+	  "dsuYesOrNo":"[steps('dsuConfig').dsuSelector]",	
 	}
   }
 }

@@ -1041,6 +1041,80 @@
 			  }			  
 			}
 		  }
+		},
+		{
+		  "apiVersion": "[variables('apiVersions').resources.deployments]",
+		  "type": "Microsoft.Resources/deployments",
+		  "name": "[variables('dsu')]",
+		  "dependsOn": [
+			"[variables('vnet')]"			
+		  ],
+		  "properties": {
+			"mode": "Incremental",
+			"templateLink": {
+			  "uri": "[variables('templateUrlDsu')]",
+			  "contentVersion": "1.0.0.0"
+			},
+			"parameters": {
+			  "apiVersions":{
+				"value":"[variables('apiVersions')]"
+			  },
+			  "location": {
+				"value": "[parameters('location')]"
+			  },
+			  "adminUsername": {
+				"value": "[parameters('adminUsername')]"
+			  },
+			  "dsuPassword": {
+				"value": "[parameters('dsuPassword')]"
+			  },
+			  "dsuSshPublicKey":{
+			    "value":"[parameters('dsuSshPublicKey')]"
+			  },
+			  "dsuAuthenticationType":{
+				"value":"[parameters('dsuAuthenticationType')]"
+			  },
+			  "dsuDBCPassword":{
+				"value":"[parameters('dsuDBCPassword')]"
+			  },
+			  "dsuIntPassword":{
+				"value":"[parameters(dsuIntPassword)]"
+			  },
+			  "dsuSystemPrefix":{
+			    "value":"[parameters('dsuSystemPrefix')]"
+			  },
+			  "dsuNodeCount": {
+				"value": "[variables('dsuNodeCount')]"
+			  },
+			  "dsuVMSize": {
+				"value": "[parameters('dsuClusterVmSize')]"
+			  },
+			  "subnet1DMID":{
+			    "value":"[variables('subnet1ID')]"
+			  },			
+			  "dsuSubnetStartAddress":{
+			    "value":"[variables('dsuSubnetStartAddress')]"
+			  },
+			  "imagePublisher":{
+			   "value":"[variables('imagePublisherDSU')]"
+			  },
+			  "imageOffer":{
+			   "value":"[variables('imageOfferDSU')]"
+			  },
+			  "imageSku":{
+			   "value":"[variables('imageSkuDSU')]"
+			  },
+			  "imageStorageAccountType":{
+				"value": "[variables('dsuImageStorageAccountType')]"
+			  },
+			  "sharedStorageAccountType":{
+			   "value": "[variables('dsuSharedStorageAccountType')]"
+			  },
+			  "teradataTags":{
+			    "value":"[parameters('teradataTags')]"
+			  }
+			}
+		  }
 		}
 	  ],
 	  "outputs": {

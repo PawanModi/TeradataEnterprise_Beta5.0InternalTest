@@ -901,30 +901,6 @@
 						  }
 						},	
 						{
-						  "name": "vpSSHCredntials",
-						  "type": "Microsoft.Compute.CredentialsCombo",
-						  "label": {
-							"authenticationType": "Authentication type",
-							"password": "Viewpoint Password",
-							"confirmPassword": "Viewpoint Password",
-							"sshPublicKey": "SSH public key"
-						  },
-						  "toolTip": {
-							"authenticationType": "",
-							"password": "",
-							"sshPublicKey": ""
-						  },
-						  "constraints": {
-							"required": true
-						  },
-						  "options": {
-							"hideConfirmation": "[not(equals('Yes',steps('viewPointConfig').viewpointSelector))]",
-							"hidePassword": "[not(equals('Yes',steps('viewPointConfig').viewpointSelector))]"
-						  },
-						  "osPlatform": "Linux",
-						  "visible": "[equals('Yes',steps('viewPointConfig').viewpointSelector)]"
-						},
-						{
 							"name": "vpSystemNamePrefix",
 							"type": "Microsoft.Common.TextBox",
 							"label": "Viewpoint System Name Prefix",
@@ -1073,31 +1049,7 @@
 							]
 						  }
 						},
-						{
-						  "name": "dmSSHCredntials",
-						  "type": "Microsoft.Compute.CredentialsCombo",
-						  "label": {
-							"authenticationType": "Authentication type",
-							"password": "DATAMOVER Password",
-							"confirmPassword": "Confirm DATAMOVER Password",
-							"sshPublicKey": "SSH public key"
-						  },
-						  "toolTip": {
-							"authenticationType": "",
-							"password": "DATAMOVER password for the Data Mover internal repository",
-							"sshPublicKey": ""
-						  },
-						  "constraints": {
-							"required": true
-						  },							
-						  "options": {
-							"hideConfirmation": "[not(equals('Yes',steps('dataMoverConfig').dataMoverSelector))]",
-							"hidePassword": "[not(equals('Yes',steps('dataMoverConfig').dataMoverSelector))]"
-						  },						 	
-						  "osPlatform": "Linux",
-						  "visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"
-						  
-						},
+						
 						{
 							"name": "dmDBCPassword",
 							"type": "Microsoft.Common.PasswordBox",
@@ -1221,31 +1173,6 @@
 						  }
 						},
 						{
-						  "name": "dsuSSHCredntials",
-						  "type": "Microsoft.Compute.CredentialsCombo",
-						  "label": {
-							"authenticationType": "Authentication type",
-							"password": "Authentication Password",
-							"confirmPassword": "Confirm authentication Password",
-							"sshPublicKey": "SSH public key"
-						  },
-						  "toolTip": {
-							"authenticationType": "",
-							"password": "dsu password for the Data Mover internal repository",
-							"sshPublicKey": ""
-						  },
-						  "constraints": {
-							"required": true
-						  },							
-						  "options": {
-							"hideConfirmation": "[not(equals('Yes',steps('dsuConfig').dsuSelector))]",
-							"hidePassword": "[not(equals('Yes',steps('dsuConfig').dsuSelector))]"
-						  },						 	
-						  "osPlatform": "Linux",
-						  "visible": "[equals('Yes',steps('dsuConfig').dsuSelector)]"
-						  
-						},
-						{
 							"name": "dsuDBCPassword",
 							"type": "Microsoft.Common.PasswordBox",
 							"label": {
@@ -1353,29 +1280,33 @@
 	  "existingNSGName":"[steps('generalConfig').existingNSGName]",
 	  "nsgResourceGroup":"[steps('generalConfig').existingNSGResourceGroup]",
 	  
-	  "dmPassword":"[steps('dataMoverConfig').dmSSHCredntials.password]",
-	  "dmSshPublicKey":"[steps('dataMoverConfig').dmSSHCredntials.sshPublicKey]",
-	  "dmAuthenticationType": "[steps('dataMoverConfig').dmSSHCredntials.authenticationType]",
+	  "dmPassword":"[basics('SSHCredntials').password]",
+	  "dmSshPublicKey":"[basics('SSHCredntials').sshPublicKey]",	  
+	  "dmAuthenticationType": "[basics('SSHCredntials').authenticationType]",
 	  "dmDBCPassword":"[steps('dataMoverConfig').dmDBCPassword]",	    
 	  "dmIntPassword":"[steps('dataMoverConfig').dmIntPassword]",	
 	  "dmSystemPrefix":"[steps('dataMoverConfig').dmSystemNamePrefix]",
 	  "dmAgentNodeCount":"[int(coalesce(steps('dataMoverConfig').dmAgentNodeCount,0))]",
 	  "dmClusterVmSize":"[steps('dataMoverConfig').dmClusterVmSize]",	  
 	  "dmYesOrNo":"[steps('dataMoverConfig').dataMoverSelector]",	
+	  
+	  "smPassword":"[basics('SSHCredntials').password]",
+	  "smSshPublicKey":"[basics('SSHCredntials').sshPublicKey]",	  
+	  "smAuthenticationType": "[basics('SSHCredntials').authenticationType]",
 	  "smSiteID":"[steps('serverManagementConfig').smSiteID]",
 	  "smAdminPassword":"[steps('serverManagementConfig').smAdminPassword]",	  
 	  "smRESTPassword":"[steps('serverManagementConfig').smRESTPassword]",	  
 	  "smYesOrNo":"[steps('serverManagementConfig').smSelector]",	
-	  "vpPassword":"[steps('viewPointConfig').vpSSHCredntials.password]",
-	  "vpSshPublicKey":"[steps('viewPointConfig').vpSSHCredntials.sshPublicKey]",
-	  "vpAuthenticationType": "[steps('viewPointConfig').vpSSHCredntials.authenticationType]",	  
+	  "vpPassword":"[basics('SSHCredntials').password]",
+	  "vpSshPublicKey":"[basics('SSHCredntials').sshPublicKey]",	  
+	  "vpAuthenticationType": "[basics('SSHCredntials').authenticationType]",  
 	  "vpSystemNamePrefix":"[steps('viewPointConfig').vpSystemNamePrefix]",	  
 	  "vpVmSize":"[steps('viewPointConfig').vpClusterVmSize]",	  
 	  "vpYesOrNo":"[steps('viewPointConfig').viewpointSelector]"	  ,
 	  
-	  "dsuPassword":"[steps('dsuConfig').dsuSSHCredntials.password]",
-	  "dsuSshPublicKey":"[steps('dsuConfig').dsuSSHCredntials.sshPublicKey]",
-	  "dsuAuthenticationType": "[steps('dsuConfig').dsuSSHCredntials.authenticationType]",
+	  "dsuPassword":"[basics('SSHCredntials').password]",
+	  "dsuSshPublicKey": "[basics('SSHCredntials').sshPublicKey]",	  
+	  "dsuAuthenticationType": "[basics('SSHCredntials').authenticationType]",
 	  "dsuDBCPassword":"[steps('dsuConfig').dsuDBCPassword]",	    
 	  "dsuadminPassword":"[steps('dsuConfig').dsuadminPassword]",
 	  "dsuSystemPrefix":"[steps('dsuConfig').dsuSystemNamePrefix]",

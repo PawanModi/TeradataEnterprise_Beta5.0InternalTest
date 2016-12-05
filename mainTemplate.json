@@ -4,7 +4,7 @@
 	  "parameters": {
 		"artifactsBaseUrl": {
 		  "type": "string",
-		  "defaultValue": "https://raw.githubusercontent.com/btprabhu/TeradataEnterprise_Beta5.0_Ecointernal/master",
+		  "defaultValue": "https://raw.githubusercontent.com/btprabhu/TeradataEnterprise_Beta5.0InternalTest/master",
 		  "metadata": {
 			"description": "Base URL of the solution template gallery package not including the trailing slash",
 			"artifactsBaseUrl": ""
@@ -248,6 +248,27 @@
 		 "metadata":{
 		  "description":"Weather to deploy datamover yes or no"		 
 		 }
+		},
+		"smPassword": {
+		  "type": "securestring",
+		   "defaultValue": "",
+		  "metadata": {
+			"description": "Password for administrator SM"
+		  }
+		},
+		"smSshPublicKey":{
+		 "type":"string",
+		 "defaultValue": "",
+		 "metadata":{
+			"description":"SSH public key for SM"
+		 }
+		},		
+		"smAuthenticationType": {
+		  "type": "string",         
+		  "defaultValue": "password",	
+		  "metadata": {
+			"description": "Authentication type for the SM virtual machines"
+		  }
 		},
 		"smSiteID": {
 		 "type": "string",
@@ -533,8 +554,6 @@
 		"dmSystemCount":"[add(1,parameters('dmAgentNodeCount'))]",
 		"dsuNodeCount":1,
 		
-		"smSshPublicKeyDefault":"",
-		"smAuthenticationType":"password",
 		"smSystemPrefix":"sm",
 		"s1": "[split(parameters('vmSubnetStartAddress'),'.')]",
 		"datamoverAddressCount":"[parameters('vmCountDatabase')]",		

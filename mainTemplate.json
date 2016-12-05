@@ -368,6 +368,13 @@
 			"description": "DSU dbc password"
 		  }		
 		},
+		"dsuIntPassword":{
+		"type": "securestring",
+		  "defaultValue": "",		  
+		  "metadata": {
+			"description": "DSU dbc password"
+		  }		
+		},
 		"dsuadminPassword":{
 		"type": "securestring",
 		  "defaultValue": "",		  

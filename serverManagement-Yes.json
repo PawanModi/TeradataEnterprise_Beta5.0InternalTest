@@ -26,6 +26,13 @@
         "description": "Server management siteID"
       }
     },
+	"smPassword": {
+		 "type": "securestring",
+		 "defaultValue": "",
+		 "metadata": {
+			"description": "Password for administrator SM"
+		  }
+	},
     "smSshPublicKey": {
       "type": "string",
       "metadata": {
@@ -337,7 +344,7 @@
         "osProfile": {
           "computerName": "[concat(variables('vm'),copyIndex())]",
           "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('smAdminPassword')]",
+          "adminPassword": "[parameters('smPassword')]",
           "linuxConfiguration": "[variables('linuxConfiguration')]"
         },
         "storageProfile": {

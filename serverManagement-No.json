@@ -26,6 +26,13 @@
         "description": "Server management siteID"
       }
     },
+	"smPassword": {
+		 "type": "securestring",
+		 "defaultValue": "",
+		 "metadata": {
+			"description": "Password for administrator SM"
+		  }
+	},
     "smSshPublicKey": {
       "type": "string",
       "metadata": {

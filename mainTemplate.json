@@ -936,6 +936,9 @@
 			  "smSiteID":{
 			   "value": "[parameters('smSiteID')]"
 			  },
+			  "smPassword":{
+					"value":"[parameters('smPassword')]"
+				},
 			  "smSshPublicKey":{
 			   "value":"[variables('smSshPublicKeyDefault')]"
 			  },

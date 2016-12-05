@@ -1196,10 +1196,10 @@
 		"name": "dsuConfig",
 		"label": "Data Stream Utility",
 		"subLabel": {
-		"preValidation": "Configure Data Mover",
+		"preValidation": "Configure Data Stream Utility",
 		"postValidation": "Done"
 		},
-		"bladeTitle": "Data Mover settings",
+		"bladeTitle": "Data Stream Utility settings",
 		"elements": [ 
 					   {
 						  "name": "dsuSelector",

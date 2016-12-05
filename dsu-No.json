@@ -1,0 +1,128 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": { 
+	"apiVersions": {
+      "type": "object",
+      "metadata": {
+        "description": "Object with all relevant API versions passed from the mainTemplate"
+      }
+    },  
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location for the deployment"
+      }
+    },
+    "adminUserName": {
+      "type": "string",      
+      "metadata": {
+        "description": "Username for administrator"
+      }
+    },   
+    "dsuPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for administrator"
+      }
+    },	
+    "dsuSshPublicKey": {
+      "type": "string",      
+      "metadata": {
+        "description": "SSH public key that will be included on all nodes in the cluster. The OpenSSH public key can be generated with tools like ssh-keygen on Linux or OS X."
+      }
+    },
+	"dsuAuthenticationType": {
+      "type": "string",         
+      "metadata": {
+        "description": "Authentication type for the virtual machines"
+      }
+    },
+	"dsuDBCPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for DBS"
+      }
+    },	   
+	"dsuIntPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for DBS"
+      }
+    },
+	"dsuSystemPrefix": {
+      "type": "string",    
+      "metadata": {
+        "description": "Datamover VM system prefix"
+      }
+    },	
+	
+    "dsuNodeCount": {
+      "type": "int",
+      "metadata": {
+        "description": "Number of agent virtual machines instances to provision"
+      }
+    },	
+	"dsuVMSize": {
+      "type": "string",    
+      "metadata": {
+        "description": "Datamover VM size"
+      }
+    },	
+    "subnet1DsuID":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Datamover Subnet ID"	  
+	  }
+	},	
+	"dsuSubnetStartAddress":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Datmover subnet start address"
+	 }
+	},
+	"imageStorageAccountType": {
+      "type": "string",     
+      "metadata": {
+        "description": "Storage Account type for OS vhd"
+      }      
+    },	
+	"sharedStorageAccountType":{
+	  "type":"string",
+	  "metadata":{
+	    "description":"StorageAccount type for data disk vhd"
+	  }
+	},	
+	"imagePublisher":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image publisher"
+	 }	
+	},
+	"imageOffer":{
+	 "type":"string",
+	 "metadata":{
+	   "description":"Image offer name" 
+	  }	
+	},
+	"imageSku":{
+	  "type":"string",
+	  "metadata":{
+		"description":"Image Sku name"
+	   }
+	},
+	"teradataTags":{
+	 "type":"object",
+	 "metadata":{
+	    "description":"Tags for teradata resources"
+	 }	
+	}	
+  },
+    "variables": {      	        	
+  },
+  "resources": [       
+  ],
+  "outputs": {   
+    
+  }
+}

@@ -319,6 +319,69 @@
 		  "description":"Weather to deploy viewpoint yes or no"		 
 		 }
 		},
+		"dsuPassword":{
+		"type": "securestring",
+		   "defaultValue": "",
+		  "metadata": {
+			"description": "Password for administrator DSU"
+		  }
+		},
+		"dsuSshPublicKey": {
+		 "type":"string",
+		 "defaultValue": "",
+		 "metadata":{
+			"description":"SSH public key for DSU"
+		 }
+		},
+		"dsuAuthenticationType":{
+		"type": "string",         
+		  "defaultValue": "password",	
+		  "metadata": {
+			"description": "Authentication type for the DSU virtual machines"
+		  }
+		},
+		"dsuDBCPassword":{
+		"type": "securestring",
+		  "defaultValue": "",		  
+		  "metadata": {
+			"description": "DSU dbc password"
+		  }		
+		},
+		"dsuadminPassword":{
+		"type": "securestring",
+		  "defaultValue": "",		  
+		  "metadata": {
+			"description": "DSU int dbc password"
+		  }
+		},
+		"dsuSystemPrefix":{
+		"type":"string",
+		  "defaultValue":"dsu",
+		  "metadata":{
+		    "description":"dsu system prefix"
+		  }		
+		},
+		"dsuAgentNodeCount":{
+		"type":"int",
+		 "defaultValue": 1,
+		 "metadata":{
+		   "description":"Number of Additional DSU Agents(Min:0 Max: 3)"
+		 }		
+		},
+		"dsuClusterVmSize":{
+		"type":"string",
+		  "defaultValue":"",
+		  "metadata":{
+		    "description":"DSU VM size"
+		}
+		},
+		"dsuYesOrNo":{
+		"type":"string",
+		 "defaultValue": "No",
+		 "metadata":{
+		  "description":"Weather to deploy dsu yes or no"		 
+		 }
+		},
 		"teradataTags": {
 		  "type": "object",
 		  "defaultValue": {
@@ -366,7 +429,9 @@
 		"defaultDatamoverUrl_1":"[concat(variables('baseUrl'),'datamoverMA-',parameters('dmYesOrNo'),'.json')]",
 		"defaultDatamoverUrl_2":"[concat(variables('baseUrl'),'datamoverMA-',parameters('dmYesOrNo'),'.json')]",
 		"defaultDatamoverUrl_3":"[concat(variables('baseUrl'),'datamoverMA-',parameters('dmYesOrNo'),'.json')]",		
-		"templateUrlDatamover":"[variables(concat('defaultDatamoverUrl_',parameters('dmAgentNodeCount')))]",		
+		"templateUrlDatamover":"[variables(concat('defaultDatamoverUrl_',parameters('dmAgentNodeCount')))]",
+        "templateUrlDsu":"[concat(variables('baseUrl'),'dsu-',parameters('dsuYesOrNo'),'.json')]",
+
 		"templateUrlServerManagement":"[concat(variables('baseUrl'),'serverManagement-',parameters('smYesOrNo'),'.json')]",		
 		"defaultScriptUrlInit_Standard_D4_v2":"[concat(variables('baseUrl'),'mpp_configuration.sh')]",
 		"defaultScriptUrlInit_Standard_G5":"[concat(variables('baseUrl'),'mpp_configuration_ls1.sh')]",
@@ -449,6 +514,10 @@
 		"imageOfferVP":"viewpoint-beta-preview",
 		"imageSkuVP":"viewpoint-beta",	
 		
+		"imagePublisherDSU":"teradata",
+		"imageOfferDSU":"teradata-mpp-beta-preview",
+		"imageSkuDSU":"mpp-beta-image",
+		
 		"smVMSize":"Standard_DS3_V2",
 		"smImageStorageAccountType":"Premium_LRS",
 		"smSharedStorageAccountType":"Premium_LRS",
@@ -456,10 +525,13 @@
 		"dmSharedStorageAccountType":"Premium_LRS",
 		"vpImageStorageAccountType":"Premium_LRS",
 		"vpharedStorageAccountType":"Premium_LRS",
+		"dsuImageStorageAccountType":"Premium_LRS",
+		"dsuSharedStorageAccountType":"Premium_LRS",
 		"smSystemCount":1,
 		"vpNodeCount":1,
 		"dmMasterCount":1,
 		"dmSystemCount":"[add(1,parameters('dmAgentNodeCount'))]",
+		"dsuNodeCount":1,
 		
 		"smSshPublicKeyDefault":"",
 		"smAuthenticationType":"password",
@@ -468,9 +540,11 @@
 		"datamoverAddressCount":"[parameters('vmCountDatabase')]",		
 		"serverManagementAddressCount":"[add(parameters('vmCountDatabase'),variables('dmSystemCount'))]",		
 		"viewpointAddressCount":"[add(parameters('vmCountDatabase'),add(variables('dmSystemCount'),variables('smSystemCount')))]",
+		"dsuAddressCount":"[add(parameters('vmCountDatabase'),add(variables('dmSystemCount'),add(variables('smSystemCount'),parameters('dsuAgentNodeCount'))))]",
 		"dmSubnetStartAddress":"[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),variables('datamoverAddressCount')),256)), '.', mod(add(int(variables('s1')[3]),variables('datamoverAddressCount')),256))]",
 		"smSubnetStartAddress":"[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),variables('serverManagementAddressCount')),256)), '.', mod(add(int(variables('s1')[3]),variables('serverManagementAddressCount')),256))]",
 		"vpSubnetStartAddress":"[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),variables('viewpointAddressCount')),256)), '.', mod(add(int(variables('s1')[3]),variables('viewpointAddressCount')),256))]",		
+		"dsuSubnetStartAddress":"[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),variables('viewpointAddressCount')),256)), '.', mod(add(int(variables('s1')[3]),variables('dsuAddressCount')),256))]",	
 		"vpHostFileParam_Yes":"[concat(' --vp ',parameters('vpSystemNamePrefix'),',',variables('vpNodeCount'),',',variables('vpSubnetStartAddress'))]",
 		"vpHostFileParam_No":"",		
 		"generateHostFileParam":"[concat('--tpa ',parameters('vmNamePrefixDatabase'),',',parameters('vmCountDatabase'),',',parameters('vmSubnetStartAddress'),variables(concat('vpHostFileParam_',parameters('vpYesOrNo'))))]",
@@ -480,6 +554,7 @@
 		"database":"[concat('database',uniqueString(resourceGroup().id))]",
 		"viewpoint":"[concat('viewpoint',uniqueString(resourceGroup().id))]",
 		"datamover":"[concat('datamover',uniqueString(resourceGroup().id))]",
+		"dsu":"[concat('dsu',uniqueString(resourceGroup().id))]",
 		"serverManagement":"[concat('serverManagement',uniqueString(resourceGroup().id))]"
 	  },
 	  "resources": [
@@ -759,7 +834,7 @@
 				"value":"[parameters('dmDBCPassword')]"
 			  },
 			  "dmIntPassword":{
-				"value":"[parameters(dmIntPassword)]"
+				"value":"[parameters('dmIntPassword')]"
 			  },
 			  "dmSystemPrefix":{
 			    "value":"[parameters('dmSystemPrefix')]"

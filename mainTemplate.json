@@ -1115,7 +1115,7 @@
 			  "dsuVMSize": {
 				"value": "[parameters('dsuClusterVmSize')]"
 			  },
-			  "subnet1DMID":{
+			  "subnet1DsuID":{
 			    "value":"[variables('subnet1ID')]"
 			  },			
 			  "dsuSubnetStartAddress":{

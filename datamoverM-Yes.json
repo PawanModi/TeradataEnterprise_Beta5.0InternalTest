@@ -309,7 +309,7 @@
     {
       "apiVersion": "[parameters('apiVersions').compute.virtualMachines]",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(variables('vm'),copyIndex())]",
+      "name": "[concat(variables('vm'),concat('Master-Agent',add(1,copyIndex())))]",
       "location": "[parameters('location')]",
 	  "plan":{
 		 "name":"[parameters('imageSku')]",		 

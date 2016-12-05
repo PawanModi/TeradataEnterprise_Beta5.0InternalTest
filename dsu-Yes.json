@@ -286,7 +286,7 @@
     {
       "apiVersion": "[parameters('apiVersions').compute.virtualMachines]",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(variables('vm'),copyIndex())]",
+      "name": "[concat(variables('vm'),concat('Master',add(1,copyIndex())))]",
       "location": "[parameters('location')]",
 	  "plan":{
 		 "name":"[parameters('imageSku')]",		 
@@ -314,7 +314,7 @@
           "vmSize": "[parameters('dsuVMSize')]"
         },
         "osProfile": {
-          "computerName": "[concat(variables('vm'),concat('Master-Agent',add(copyIndex(),1)))]",
+          "computerName": "[concat(variables('vm'),concat('Master',add(copyIndex(),1)))]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('dsuPassword')]",
           "linuxConfiguration": "[variables('linuxConfiguration')]"

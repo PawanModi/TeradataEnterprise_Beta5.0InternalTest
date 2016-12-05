@@ -1139,7 +1139,7 @@
 						  "offer": "teradata-mpp-beta-preview",
 						  "sku": "mpp-beta-image"
 						  },			  
-						  "count":"[steps('databaseConfig').clusterNodeCount]",
+						  "count":"[add(1,steps('dataMoverConfig').dmAgentNodeCount)]",
 						  "visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"							  
 						}
 				   ]

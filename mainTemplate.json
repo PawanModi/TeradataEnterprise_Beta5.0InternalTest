@@ -1107,7 +1107,7 @@
 				"value":"[parameters('dsuDBCPassword')]"
 			  },
 			  "dsuIntPassword":{
-				"value":"[parameters(dsuIntPassword)]"
+				"value":"[parameters('dsuIntPassword')]"
 			  },
 			  "dsuSystemPrefix":{
 			    "value":"[parameters('dsuSystemPrefix')]"

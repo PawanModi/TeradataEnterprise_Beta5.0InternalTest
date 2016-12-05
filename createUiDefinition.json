@@ -1104,7 +1104,7 @@
 							"name": "dmAgentNodeCount",
 							"type": "Microsoft.Common.TextBox",
 							"label": "Datamover Agents",
-							"defaultValue": 0,			
+							"defaultValue": 1,			
 							"toolTip": "Number of additional Data Mover Agents (Min: 0 Max: 3)",
 							"constraints": {
 							  "required": true,    

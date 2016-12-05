@@ -566,7 +566,7 @@
 		"datamoverAddressCount":"[parameters('vmCountDatabase')]",		
 		"serverManagementAddressCount":"[add(parameters('vmCountDatabase'),variables('dmSystemCount'))]",		
 		"viewpointAddressCount":"[add(parameters('vmCountDatabase'),add(variables('dmSystemCount'),variables('smSystemCount')))]",
-		"dsuAddressCount":"[add(parameters('vmCountDatabase'),add(variables('dmSystemCount'),add(variables('smSystemCount'),parameters('dsuAgentNodeCount'))))]",
+		"dsuAddressCount":"[add(parameters('vmCountDatabase'),add(variables('dmSystemCount'),add(variables('smSystemCount'),variables('vpNodeCount'))))]",
 		"dmSubnetStartAddress":"[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),variables('datamoverAddressCount')),256)), '.', mod(add(int(variables('s1')[3]),variables('datamoverAddressCount')),256))]",
 		"smSubnetStartAddress":"[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),variables('serverManagementAddressCount')),256)), '.', mod(add(int(variables('s1')[3]),variables('serverManagementAddressCount')),256))]",
 		"vpSubnetStartAddress":"[concat(variables('s1')[0], '.', variables('s1')[1], '.', add(int(variables('s1')[2]), div(add(int(variables('s1')[3]),variables('viewpointAddressCount')),256)), '.', mod(add(int(variables('s1')[3]),variables('viewpointAddressCount')),256))]",		

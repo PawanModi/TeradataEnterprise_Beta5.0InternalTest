@@ -940,10 +940,10 @@
 					"value":"[parameters('smPassword')]"
 				},
 			  "smSshPublicKey":{
-			   "value":"[variables('smSshPublicKeyDefault')]"
+			   "value":"[parameters('smSshPublicKey')]"
 			  },
 			  "smAuthenticationType":{
-			    "value":"[variables('smAuthenticationType')]"
+			    "value":"[parameters('smAuthenticationType')]"
 			  },
 			  "smAdminPassword":{
 					"value":"[parameters('smAdminPassword')]"

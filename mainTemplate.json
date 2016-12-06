@@ -543,8 +543,8 @@
 		"imageSkuVP":"viewpoint-beta",	
 		
 		"imagePublisherDSU":"teradata",
-		"imageOfferDSU":"teradata-mpp-beta-preview",
-		"imageSkuDSU":"mpp-beta-image",
+		"imageOfferDSU":"dsuazure-preview",
+		"imageSkuDSU":"dsu-azure",
 		
 		"smVMSize":"Standard_DS3_V2",
 		"smImageStorageAccountType":"Premium_LRS",

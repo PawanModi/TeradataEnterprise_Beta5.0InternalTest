@@ -1136,8 +1136,8 @@
 						  "osPlatform": "Linux", 
 						  "imageReference": {
 						  "publisher": "teradata",
-						  "offer": "teradata-mpp-beta-preview",
-						  "sku": "mpp-beta-image"
+						  "offer": "dsuazure-preview",
+						  "sku": "dsu-azure"
 						  },			  
 						  "count":"[add(steps('dataMoverConfig').dmAgentNodeCount,1)]",
 						  "visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"							  

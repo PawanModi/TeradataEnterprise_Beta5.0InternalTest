@@ -504,6 +504,7 @@
 
 		"publicIPAddressName":"[concat(parameters('vmNamePrefixDatabase'),'-','publicip')]",
 		"publicIPAddressDomainNameLabel":"[concat(parameters('vmNamePrefixDatabase'),'-',uniqueString(resourceGroup().id))]",
+		"defaultPublicIPType_No":"Static",
 		"defaultPublicIPType_single":"Static",
 		"defaultPublicIPType_multiple":"Static",			
 		"publicIPAddressType":"[variables(concat('defaultPublicIPType_',parameters('publicIPAddressSingleOrMultiple')))]",

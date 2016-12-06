@@ -1104,7 +1104,7 @@
 							"name": "dmAgentNodeCount",
 							"type": "Microsoft.Common.TextBox",
 							"label": "Datamover Agents",
-							"defaultValue": 0,			
+							"defaultValue": "0",			
 							"toolTip": "Number of additional Data Mover Agents (Min: 0 Max: 3)",
 							"constraints": {
 							  "required": true,    
@@ -1139,7 +1139,7 @@
 						  "offer": "dsuazure-preview",
 						  "sku": "dsu-azure"
 						  },			  
-						  "count":"[steps('dataMoverConfig').dmAgentNodeCount]",
+						  "count":"[add(steps('dataMoverConfig').dmAgentNodeCount,1)]",
 						  "visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"							  
 						}
 				   ]

@@ -183,7 +183,7 @@
 	"publicIPAddressDomainNameLabel":"[concat(parameters('dsuSystemPrefix'),'-',uniqueString(resourceGroup().id))]",
 	"dataStoreStorageAccountCount": "[add(div(parameters('dsuNodeCount'),4),1)]",
     "diagnosticsStorageAccount": "[concat('dsudiag',uniqueString(resourceGroup().id,'d'))]",	
-	"s1": "[split(parameters('dmSubnetStartAddress'),'.')]",
+	"s1": "[split(parameters('dsuSubnetStartAddress'),'.')]",
 	"publicIPAddressType":"Static"	     	
   },
   "resources": [ 

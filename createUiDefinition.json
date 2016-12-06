@@ -834,6 +834,10 @@
 			"toolTip": "Public IP selector will create single(single public IP for first node in cluster) or multiple public IP(each node will have public IP in cluster)",
 			"constraints": {
 				"allowedValues": [
+				     {
+						"label": "None",
+						"value": "No"
+					},
 			   	    {
 						"label": "Single",
 						"value": "Single"
@@ -1104,7 +1108,7 @@
 							"name": "dmAgentNodeCount",
 							"type": "Microsoft.Common.TextBox",
 							"label": "Datamover Agents",
-							"defaultValue": "0",			
+							"defaultValue":"0",			
 							"toolTip": "Number of additional Data Mover Agents (Min: 0 Max: 3)",
 							"constraints": {
 							  "required": true,    

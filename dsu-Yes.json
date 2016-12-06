@@ -249,7 +249,26 @@
 		  },
 		  "properties": {
 		  }
-	},			
+	},	
+     {
+      "apiVersion": "[parameters('apiVersions').storage.storageAccounts]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('dataStoreStorageAccountArray')[copyIndex()]]",
+      "location": "[parameters('location')]",
+      "kind": "Storage",	  
+	  "tags": {
+     	"provider": "[toUpper(parameters('teradataTags').provider)]"
+      },
+	  "copy": {
+        "name": "dataStoreStorageAccountsCopy",
+        "count": "[variables('dataStoreStorageAccountCount')]"
+      },
+      "sku": {
+        "name": "[parameters('sharedStorageAccountType')]"
+      },
+      "properties": {
+      }
+    },	
     {
       "apiVersion": "[parameters('apiVersions').network.networkInterfaces]",
       "type": "Microsoft.Network/networkInterfaces",

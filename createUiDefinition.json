@@ -1139,7 +1139,7 @@
 						  "offer": "dsuazure-preview",
 						  "sku": "dsu-azure"
 						  },			  
-						  "count":"[add(steps('dataMoverConfig').dmAgentNodeCount,1)]",
+						  "count":"[steps('dataMoverConfig').dmAgentNodeCount]",
 						  "visible": "[equals('Yes',steps('dataMoverConfig').dataMoverSelector)]"							  
 						}
 				   ]

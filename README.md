@@ -1,4 +1,4 @@
-#TeradataEnterprise_Beta5.0_Ecointernal
+#TeradataEnterprise_Beta5.0_EcointernalTest
 This repository will use existinh NSG, updated custom script extension 2.0 and support following SKUs
 
 <ul>
